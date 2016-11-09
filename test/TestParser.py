@@ -2,7 +2,7 @@
 # auto: flytrap
 import os
 import unittest
-from cnblogs.parse_html import ParserBlog
+from Common.Parser import ParserBlog
 
 
 class TestPasser(unittest.TestCase):

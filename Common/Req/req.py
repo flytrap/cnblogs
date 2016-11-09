@@ -15,5 +15,6 @@ else:
     get = requests.get
     post = requests.post
 
+get = partial(get, timeout=3)
 if __name__ == '__main__':
     url = 'http://www.cnblogs.com/'
