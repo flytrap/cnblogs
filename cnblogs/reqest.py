@@ -10,7 +10,7 @@ from config import TAG_CATEGORIES_URL, AjaxHeader, Header, proxies
 
 int_re = re.compile('\d+')
 url_re = re.compile('href="(https?://[\w\./]+)"')
-tar_re = re.compile('>([\w\.\s]+)</a>')
+tar_re = re.compile('>(.+)</a>')
 logger = logging.getLogger('request')
 
 
@@ -26,11 +26,11 @@ def get_html(url):
 
 
 def get_tag_url(url, blog_id):
-    tag_url = request_tag_and_categories(url, blog_id)
-    if tag_url == url:
+    tag_info = request_tag_and_categories(url, blog_id)
+    if tag_info == url:
         logger.warning(url)
         return
-    return tag_url
+    return tag_info
 
 
 def request_tag_and_categories(url, blog_id):

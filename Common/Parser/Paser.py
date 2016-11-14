@@ -33,6 +33,13 @@ class ParserBase(HTMLParser):
             for att, value in attrs:
                 if att == 'href':
                     self.check_url(value)
+        if tag == 'title':
+            setattr(self, 'title', 'title')
+
+    def handle_data(self, data):
+        if hasattr(self, 'title'):
+            delattr(self, 'title')
+            self.title_text = data
 
     def start_doing(self, attrs):
         # custom anything
@@ -66,8 +73,8 @@ class ParserUrls(ParserBase):
             if self.__filter_index(url):
                 url = self.__filter_re(url)
         elif 'index' in self.filter_dict:
-            if self.__filter_index(url):
-                url = ''
+            if not self.__filter_index(url):
+                url = '/'
         elif 're' in self.filter_dict:
             url = self.__filter_re(url)
         if url and url not in self.urls:
