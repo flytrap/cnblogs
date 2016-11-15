@@ -1,7 +1,7 @@
 # coding: utf8
 # auto: flytrap
 import os
-import re
+from pickle_db import BlogManger
 from Common.Log import define_logger
 
 urls = []
@@ -10,11 +10,21 @@ urls = []
 def init_log():
     define_logger('parser', 'Log/parser.txt')
     define_logger('request', 'Log/request.txt')
+    define_logger('database', 'Log/database.txt')
 
 
 class CNBlogSpider(object):
     def __init__(self):
         self.index_url = 'http://www.cnblogs.com/'
+        self.blog_db_path = './cnblogs.db'
+        self.bm = self.init_db()
+
+    def init_db(self):
+        bm = BlogManger(self.blog_db_path)
+        return bm
+
+    def start(self):
+        pass
 
 
 def pickle_html(url_path, html_text):
