@@ -80,7 +80,7 @@ class DatabaseManger(object):
 class BlogManger(object):
     def __init__(self, db_path):
         self.tables = ['urls', 'tags', 'blog_info', 'blog_tag']
-        self.urls = ['id integer primary key autoincrement', 'url unique']
+        self.urls = ['id integer primary key autoincrement', 'url unique', 'hash']
         self.tags = ['id integer primary key autoincrement', 'tag']
         self.blog_info = ['id integer primary key autoincrement', 'title', 'blog', 'url']
         self.blog_tag = ['id integer primary key autoincrement', 'blog', 'tag']
@@ -127,7 +127,7 @@ class BlogManger(object):
         self.dm.insert_db('blog_tag', data_list, self.blog_tag[1:])
 
     def insert_url(self, urls):
-        self.dm.insert_db('urls', urls, self.urls)
+        self.dm.insert_db('urls', urls, self.urls[1:])
 
 
 if __name__ == '__main__':

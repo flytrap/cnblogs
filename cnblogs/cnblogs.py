@@ -11,6 +11,7 @@ def init_log():
     define_logger('parser', 'Log/parser.txt')
     define_logger('request', 'Log/request.txt')
     define_logger('database', 'Log/database.txt')
+    define_logger('spider', 'Log/spider.txt')
 
 
 class CNBlogSpider(object):

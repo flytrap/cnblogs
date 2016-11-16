@@ -27,11 +27,9 @@ def parse_blog(url):
             result['blog_info'] = bu.get('blog_info')
             tag_info = get_tag_url(url, blog_id)
             if tag_info:
-                result['tags'] = tag_info.get('Tags', [])
-                result['tags'].extend(tag_info.get('Categories', []))
+                result['blog_info']['tags'] = tag_info.get('Tags', [])
+                result['blog_info']['tags'].extend(tag_info.get('Categories', []))
                 result['urls'].extend(tag_info.get('url', []))
-        else:
-            del bu['blog_info']
     else:
         u = parse_url(html)
         result.update(u)  # 'urls' in u

@@ -1,6 +1,5 @@
 # coding: utf8
 # auto: flytrap
-import os
 import logging
 
 formatter = logging.Formatter('%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s')
