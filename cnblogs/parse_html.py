@@ -8,7 +8,7 @@ from config import EXCLUDE_URL
 from reqest import get_html, get_tag_url
 
 cn_re = re.compile('(^/)|(.*cnblogs\.com.*)')
-blog_re = re.compile('https?:[/\.\w]+?(\d+).html')  # 寧可殺錯，不許放過
+blog_re = re.compile('https?:[\/\.\w]+?(\d+).html')  # 寧可殺錯，不許放過
 blog_id_re = re.compile('cb_blogId=(\d+)')
 logger = logging.getLogger('parser')
 
@@ -25,6 +25,7 @@ def parse_blog(url):
         if bu.get('blog_info'):
             blog_id = blog_id_re.findall(html)[0]
             result['blog_info'] = bu.get('blog_info')
+            result['blog_info']['url'] = url
             tag_info = get_tag_url(url, blog_id)
             if tag_info:
                 result['blog_info']['tags'] = tag_info.get('Tags', [])
@@ -44,8 +45,20 @@ def parse_blog_url(html):
     if 'body' in pbu.blog_info:
         if 'title' not in pbu.blog_info and hasattr(pbu.blog_info, 'title_text'):
             pbu.blog_info['title'] = pbu.title_text
-            print pbu.title_text
+            logger.info('title change title_text')
     return {'blog_info': pbu.blog_info, 'urls': pbu.urls}
+
+
+def check_urls(old_url, urls):
+    up = urlparse(old_url)
+    host = up.scheme + '://' + up.netloc
+
+    def check_url(url):
+        if url.startswith('/'):
+            url = host + url
+        return url
+
+    return map(check_url, urls)
 
 
 def parse_url(html):
@@ -62,7 +75,7 @@ def filter_urls(urls):
 def filter_url(url):
     up = urlparse(url)
     for exclude_url in EXCLUDE_URL:
-        if up.hostname.startswith(exclude_url):
+        if str(up.hostname).startswith(exclude_url):
             return False
     return url
 

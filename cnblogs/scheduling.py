@@ -37,13 +37,15 @@ class PickleInfo(Thread):
         self._lock.release()
 
     def pickle_urls(self, urls):
+        if isinstance(urls, basestring):
+            urls = [urls]
         data = zip(urls, map(make_md5, urls))
         self._lock.acquire()
         self.bm.insert_url(data)
         self._lock.release()
 
     def run(self):
-        while 1:
+        while True:
             try:
                 if blog_queue.empty():
                     urls = url_queue.get(timeout=3)
@@ -52,7 +54,8 @@ class PickleInfo(Thread):
                     blog_info = blog_queue.get(timeout=3)
                     self.pickle_blog(blog_info)
             except Empty:
-                if PickleInfo.over is False and check_queue_empty():
+                if PickleInfo.over is True and check_queue_empty():
+                    logger.info('PickleInfo thread exit.')
                     break
 
 
@@ -73,6 +76,7 @@ class Parser(Thread):
                 url_queue.put(url, timeout=3)
             except Empty:
                 if self.over is True and check_queue_empty():
+                    logger.info('Parser thread exit.')
                     break
             except Full:
                 logger.warning('url_queue full:%s' % url_queue.qsize())

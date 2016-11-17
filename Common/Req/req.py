@@ -9,8 +9,8 @@ import requests
 # }
 proxies = None
 if proxies:
-    get = partial(requests.get, proxies=proxies)
-    post = partial(requests.post, proxies=proxies)
+    get = partial(requests.get, proxies=proxies, verify=False)
+    post = partial(requests.post, proxies=proxies, verify=False)
 else:
     get = requests.get
     post = requests.post

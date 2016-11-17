@@ -18,7 +18,7 @@ def get_html(url):
     try:
         req = get(url, headers=Header, proxies=proxies)
     except Exception as e:
-        logger.error(e)
+        logger.error("%s:%s" % (e, url))
         return
     if req.status_code == 200:
         return req.text
