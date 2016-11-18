@@ -19,6 +19,8 @@ def parse_blog(url):
     blog = blog_re.match(url.strip())
     html = get_html(url)
     result = {}
+    if not html:
+        return result
     if blog:
         bu = parse_blog_url(html)
         result['urls'] = bu.get('urls', [])

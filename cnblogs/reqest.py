@@ -17,6 +17,7 @@ logger = logging.getLogger('request')
 def get_html(url):
     try:
         req = get(url, headers=Header, proxies=proxies)
+        logger.info(url)
     except Exception as e:
         logger.error("%s:%s" % (e, url))
         return

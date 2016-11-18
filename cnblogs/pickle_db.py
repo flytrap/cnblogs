@@ -109,17 +109,17 @@ class BlogManger(object):
             return
         data_list = [blog_info.get('title'), blog_info.get('body'), blog_info.get('url')]
         blog_id = self.dm.insert_db('blog_info', [data_list], self.blog_info[1:])
-        tag_ids = self.check_tags(blog_info.get('tags'))
+        tag_ids = self.check_tags(blog_info.get('tags', []))
         self.relate_blog_tag(blog_id, tag_ids)
 
     def check_tags(self, tags):
         assert isinstance(tags, (list, tuple)), logger.error('tags init')
         tag_ids = []
         for tag in tags:
-            tag_id = self.dm.select_db('tags', where='tag="%s"' % tag)
+            tag_id = self.dm.select_db('tags', ['id'], where='tag="%s"' % tag)
             if not tag_id:
                 tag_id = self.dm.insert_db('tags', [[tag]], self.tags[1:])
-            tag_ids.append(tag_id if isinstance(tag_id, int) else tag_id[0][0])
+            tag_ids.append(tag_id if isinstance(tag_id, (int, basestring)) else tag_id[0][0])
         return tag_ids
 
     def relate_blog_tag(self, blog_id, tag_ids):

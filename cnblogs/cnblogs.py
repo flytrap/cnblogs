@@ -3,6 +3,7 @@
 import os
 from pickle_db import BlogManger
 from Common.Log import define_logger
+from scheduling import Scheduling
 
 urls = []
 
@@ -37,4 +38,8 @@ def pickle_html(url_path, html_text):
 
 if __name__ == '__main__':
     os.chdir('../')
-    cn = CNBlogSpider()
+    init_log()
+    database_path = './test.db'
+    index_url = 'http://www.cnblogs.com/'
+    s = Scheduling(database_path)
+    s.parser(index_url)

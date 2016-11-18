@@ -88,7 +88,7 @@ class Parser(Thread):
                 blog_queue.put(blog_info, timeout=5)
             except Full:
                 logger.warning('blog queue full:%s' % blog_queue.qsize())
-        urls = result.get('urls')
+        urls = result.get('urls', [])
         for url in urls:
             if self.check_url(url):
                 urls_queue.put(url)
@@ -111,7 +111,7 @@ class Scheduling(object):
             setattr(self, '__is_init', self)
         self.db_path = db_path
         self.pickle_num = 1
-        self.request_num = 3
+        self.request_num = 1
         self.pickle_thread = {}
         self.parser_thread = {}
 
@@ -150,10 +150,13 @@ class Scheduling(object):
 
 
 if __name__ == '__main__':
-    s = PickleInfo('test.db')
-    s.start()
-
-    time.sleep(3)
+    index_url = ''
+    s = PickleInfo('./test.db')
+    test_blog = {'body': 'body',
+                 'title': 'title',
+                 'url': 'url',
+                 'tags': ['a', 'b']}
+    blog_queue.put(test_blog)
     PickleInfo.over = True
+    s.run()
     s.join()
-    print s.__class__
