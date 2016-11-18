@@ -5,7 +5,7 @@ import hashlib
 
 def make_md5(obj):
     try:
-        obj = str.encode(obj, 'utf8')
+        obj = obj.encode('utf8')
     except (UnicodeEncodeError, TypeError):
         pass
     m = hashlib.md5(obj)

@@ -21,7 +21,7 @@ class DatabaseManger(object):
             cur = self.con_db.cursor()
             return cur
         except Exception as e:
-            logger.exception(e)
+            logger.exception(str(e))
 
     def create_table(self, table, names):
         assert self.cur is not None
@@ -46,7 +46,7 @@ class DatabaseManger(object):
                 self._insert_db(data, sql)
             except Exception as e:
                 self.bad_data.append(data)
-                logger.exception('%s:%s' % (e, data))
+                logger.warning('%s:%s' % (str(e), data))
         self.con_db.commit()
         return self.cur.lastrowid
 
@@ -70,7 +70,7 @@ class DatabaseManger(object):
             self.cur.execute(sql)
             return self.cur.fetchall()
         except Exception as e:
-            logger.exception('%s:%s' % (e, sql))
+            logger.exception('%s:%s' % (str(e), sql))
 
     def __del__(self):
         self.cur.close()
@@ -116,7 +116,7 @@ class BlogManger(object):
         assert isinstance(tags, (list, tuple)), logger.error('tags init')
         tag_ids = []
         for tag in tags:
-            tag_id = self.dm.select_db('tags', ['id'], where='tag="%s"' % tag)
+            tag_id = self.dm.select_db('tags', ['id'], where="tag='''%s'''" % tag)
             if not tag_id:
                 tag_id = self.dm.insert_db('tags', [[tag]], self.tags[1:])
             tag_ids.append(tag_id if isinstance(tag_id, (int, basestring)) else tag_id[0][0])

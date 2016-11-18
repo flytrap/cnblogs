@@ -36,6 +36,7 @@ def parse_blog(url):
     else:
         u = parse_url(html)
         result.update(u)  # 'urls' in u
+    result['urls'] = check_urls(url, result['urls'])
     result['urls'] = filter_urls(result['urls'])
     return result
 

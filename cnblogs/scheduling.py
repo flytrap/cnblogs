@@ -96,6 +96,7 @@ class Parser(Thread):
     def check_url(self, url):
         if make_md5(url) in self.url_hash:
             return False
+        self.url_hash.add(url)
         return True
 
 
