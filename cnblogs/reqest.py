@@ -10,7 +10,7 @@ from config import TAG_CATEGORIES_URL, AjaxHeader, Header, proxies
 
 int_re = re.compile('\d+')
 url_re = re.compile('href="(https?://[\w\./]+)"')
-tar_re = re.compile('>(.+)</a>')
+tar_re = re.compile('>(.+?)</a>')
 logger = logging.getLogger('request')
 
 
@@ -19,7 +19,7 @@ def get_html(url):
         req = get(url, headers=Header, proxies=proxies)
         logger.info(url)
     except Exception as e:
-        logger.error("%s:%s" % (e, url))
+        logger.error("%s:%s" % (str(e), url))
         return
     if req.status_code == 200:
         return req.text
@@ -42,7 +42,7 @@ def request_tag_and_categories(url, blog_id):
     try:
         post_id = int_re.search(path[-1]).group(0)
     except Exception as e:
-        logger.error(e)
+        logger.error(str(e))
         return
     params = {'blogApp': path[1],
               'postId': str(post_id),
